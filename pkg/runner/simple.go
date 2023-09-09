@@ -16,7 +16,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ffuf/ffuf/v2/pkg/ffuf"
+	"github.com/infosec-cyber/ffuf/v2/pkg/ffuf"
 )
 
 // Download results < 5MB

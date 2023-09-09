@@ -10,9 +10,6 @@ require (
 
 require (
 	github.com/andybalholm/cascadia v1.3.1 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	golang.org/x/net v0.7.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 )
-
-replace github.com/ffuf/ffuf/v2 => github.com/infosec-cyber/ffuf/v2 v2.0.1-0.20230421151918-5fd821c17d55
