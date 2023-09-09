@@ -126,7 +126,7 @@ func (j *Job) CalibrateIfNeeded(host string, input map[string][]byte) error {
 
 func (j *Job) calibrateFilters(responses []Response, perHost bool) error {
 	// Work down from the most specific common denominator
-	if len(responses) > 0 {
+	if len(responses) == 1 {
 		// Content length
 		baselineSize := responses[0].ContentLength
 		sizeMatch := true
@@ -227,6 +227,45 @@ func (j *Job) calibrateFilters(responses []Response, perHost bool) error {
 				_ = j.Config.MatcherManager.AddFilter("line", strconv.FormatInt(baselineLines, 10), false)
 				return nil
 			}
+		}
+	} else if len(responses) > 1 {
+		baselineSize := responses[0].ContentLength
+		baselineLines := responses[0].ContentLines
+		baselineWords := responses[0].ContentWords
+
+		sizeMatch := true
+		linesMatch := true
+		wordsMatch := true
+
+		for _, r := range responses {
+			sizeMatch = sizeMatch && baselineSize == r.ContentLength
+			linesMatch = linesMatch && baselineLines == r.ContentLines
+			wordsMatch = wordsMatch && baselineWords == r.ContentWords
+		}
+
+		if sizeMatch {
+			if perHost {
+				_ = j.Config.MatcherManager.AddPerDomainFilter(HostURLFromRequest(*responses[0].Request), "size", strconv.FormatInt(baselineSize, 10))
+			} else {
+				_ = j.Config.MatcherManager.AddFilter("size", strconv.FormatInt(baselineSize, 10), false)
+			}
+			return nil
+		}
+		if linesMatch {
+			if perHost {
+				_ = j.Config.MatcherManager.AddPerDomainFilter(HostURLFromRequest(*responses[0].Request), "line", strconv.FormatInt(baselineLines, 10))
+			} else {
+				_ = j.Config.MatcherManager.AddFilter("line", strconv.FormatInt(baselineLines, 10), false)
+			}
+			return nil
+		}
+		if wordsMatch {
+			if perHost {
+				_ = j.Config.MatcherManager.AddPerDomainFilter(HostURLFromRequest(*responses[0].Request), "word", strconv.FormatInt(baselineWords, 10))
+			} else {
+				_ = j.Config.MatcherManager.AddFilter("word", strconv.FormatInt(baselineWords, 10), false)
+			}
+			return nil
 		}
 	}
 	return fmt.Errorf("No common filtering values found")

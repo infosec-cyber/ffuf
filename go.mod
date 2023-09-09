@@ -14,3 +14,5 @@ require (
 	golang.org/x/net v0.7.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 )
+
+replace github.com/ffuf/ffuf/v2 => github.com/infosec-cyber/ffuf/v2 main
