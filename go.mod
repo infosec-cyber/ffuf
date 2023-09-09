@@ -15,4 +15,4 @@ require (
 	golang.org/x/sys v0.5.0 // indirect
 )
 
-replace github.com/ffuf/ffuf/v2 => github.com/infosec-cyber/ffuf/v2 main
+replace github.com/ffuf/ffuf/v2 => github.com/infosec-cyber/ffuf/v2 v2.0.1-0.20230421151918-5fd821c17d55
